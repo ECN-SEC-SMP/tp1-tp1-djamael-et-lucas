@@ -1,0 +1,10 @@
+Bonjour à tous ! Ce texte est un petit lexique de test.
+Il contient plusieurs mots, dont certains apparaissent plusieurs fois :
+Bonjour, bonjour, et encore bonjour...
+
+Voici quelques autres mots : test, TEST, Test.
+On a aussi des mots proches : tester, testeur, testing.
+
+Enfin, il y a des mots uniques : avion, bateau, chat, chien.
+
+Fin du lexique.
