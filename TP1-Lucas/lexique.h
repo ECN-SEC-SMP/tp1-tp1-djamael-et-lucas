@@ -1,9 +1,6 @@
 #pragma once
 
 #include <iostream>
-
-
-#include <iostream>
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -65,7 +62,3 @@ public:
     //Méthode pour afficher le nombre de mots différents dans le lexique
     int nombreMotsDifferents() const;
 };
-
-
-
-

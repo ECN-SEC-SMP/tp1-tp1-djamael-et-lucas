@@ -9,8 +9,8 @@
 #include <map>
 #include <sstream>
 
-
 using namespace std;
+
 
 //constructeur sans parametre
 Lexique::Lexique(){
@@ -37,6 +37,7 @@ void Lexique::SetNom(string nom){
 void Lexique::SetNbr_occurences(int nbr){
     Nbr_occurences = nbr;
 }
+
 
 /*------------------------------------------------------------------------------------*/
 /* Liste des méthodes de gestion du lexique */
