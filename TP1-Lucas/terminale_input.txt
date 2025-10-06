@@ -1,7 +1,0 @@
-g++ -c main.cpp
-g++ -c lexique.cpp
-g++ -std=c++17 -c utilitaire.cpp
-
-g++ -o TP1exe .\main.o .\lexique.o .\utilitaire.o
-.\TP1exe.exe
-
