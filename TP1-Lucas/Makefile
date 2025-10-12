@@ -5,8 +5,9 @@
 # === Configuration ===
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -O2
-OBJ = main.o lexique.o lexique_her.o utilitaire.o test.o
+OBJ = main.o lexique.o lexique_ligne.o utilitaire.o test.o
 TARGET = TP1exe
+OUTDIR = tp1-Lexique-output
 
 # === Règle par défaut ===
 all: $(TARGET)
@@ -22,7 +23,12 @@ $(TARGET): $(OBJ)
 # === Nettoyage ===
 clean:
 	del /Q $(OBJ) $(TARGET).exe 2>nul || true
+	@if exist $(OUTDIR) del /Q $(OUTDIR)\*.* 2>nul || true
+
 
 # === Exécution rapide ===
 run: all
+	@echo Activation de l'encodage UTF-8 pour le terminal...
+	@chcp 65001 >nul
+	@echo Lancement de l'exécutable
 	.\$(TARGET).exe

@@ -8,6 +8,7 @@
 #include <fstream> 
 #include <map>
 #include <sstream>
+#include <set>
 
 using namespace std;
 
@@ -44,41 +45,42 @@ void Lexique::SetNbr_occurences(int nbr){
 /*------------------------------------------------------------------------------------*/
 
 //Méthode pour sauvegarder le contenu du lexique produit dans un fichier
-void Lexique::sauvegarderLexique(const string& nomFichier) const{
-    //Ouvre le fichier en lecture
-    ifstream fichierEntree("tp1-Lexique-input/" + nomFichier); //permet de lire le fichier d'entrée
+void Lexique::sauvegarderLexique(const string& nomFichier) const {
+    ifstream fichierEntree("tp1-Lexique-input/" + nomFichier);
     if (!fichierEntree.is_open()) {
         cerr << "Erreur lors de l'ouverture du fichier d'entrée : " << nomFichier << endl;
         return;
     }
 
-    //Crée le nom du fichier de sortie
-    string nomFichierSortie = "tp1-Lexique-output/Lexique-Lucas-output.txt";
-
-    //Ouvre le fichier en écriture
-    ofstream fichierSortie(nomFichierSortie); //permet de créer et écrire dans le fichier de sortie
+    string nomFichierSortie = "tp1-Lexique-output/Lexique-" + Nom + "-output.txt";
+    ofstream fichierSortie(nomFichierSortie);
     if (!fichierSortie.is_open()) {
         cerr << "Erreur lors de la creation du fichier de sortie : " << nomFichierSortie << endl;
         return;
     }
 
-    //Copie le contenu du fichier d'entrée vers le fichier de sortie
-    string ligne;
-    while (getline(fichierEntree, ligne)) { //tant que il y a des lignes à lire
-        fichierSortie << ligne << endl;     // alors on écrit la ligne dans le fichier de sortie
+    string ligne, mot;
+    while (getline(fichierEntree, ligne)) {
+        istringstream iss(ligne);
+        while (iss >> mot) {
+            util::remove_punctuation(mot);
+            util::to_lower(mot);
+            if (!mot.empty())
+                fichierSortie << mot << "\n";
+        }
     }
 
-    //Ferme les fichiers
     fichierEntree.close();
     fichierSortie.close();
-
-    cout << "Le lexique a ete sauvegarde dans le fichier : " << nomFichierSortie << endl;
+    cout << "Le lexique a ete sauvegarde dans : " << nomFichierSortie << endl;
 }
+
+
 
 //Méthode tester la présence d'un mot dans le lexique de sortie et retourner son nombre d'occurrences
 int Lexique::testerMot(const string& mot) const{
     //Ouvre le fichier en lecture
-    ifstream fichierEntree("tp1-Lexique-output/Lexique-Lucas-output.txt"); //permet de lire le fichier de sortie
+    ifstream fichierEntree("tp1-Lexique-output/Lexique-" + Nom + "-output.txt"); //permet de lire le fichier de sortie
     if (!fichierEntree.is_open()) {
         cerr << "Erreur lors de l'ouverture du fichier de sortie : " << Nom << endl;
         return 0;
@@ -118,7 +120,7 @@ int Lexique::testerMot(const string& mot) const{
 
 //Méthode pour supprimer un mot du lexique
 void Lexique::supprimerMot(const std::string& mot) {
-    std::ifstream fichierEntree("tp1-Lexique-output/Lexique-Lucas-output.txt"); //permet de lire le fichier de sortie
+    std::ifstream fichierEntree("tp1-Lexique-output/Lexique-" + Nom + "-output.txt"); //permet de lire le fichier de sortie
     if (!fichierEntree.is_open()) {
         std::cerr << "Erreur lors de l'ouverture du fichier d'entree : " << Nom << std::endl;
         return;
@@ -164,7 +166,7 @@ void Lexique::supprimerMot(const std::string& mot) {
     }
 
     // Réécriture du fichier
-    std::ofstream fichierSortie("tp1-Lexique-output/Lexique-Lucas-output.txt", std::ios::trunc);
+    std::ofstream fichierSortie("tp1-Lexique-output/Lexique-" + Nom + "-output.txt", std::ios::trunc);
     if (!fichierSortie.is_open()) {
         std::cerr << "Erreur lors de la creation du fichier de sortie : " << Nom << std::endl;
         return;
@@ -179,7 +181,7 @@ void Lexique::supprimerMot(const std::string& mot) {
 //Méthode pour afficher le nombre de mots différents dans le lexique
 int Lexique::nombreMotsDifferents() const{
     //Ouvre le fichier en lecture
-    ifstream fichierEntree("tp1-Lexique-output/Lexique-Lucas-output.txt");
+    ifstream fichierEntree("tp1-Lexique-output/Lexique-" + Nom + "-output.txt");
     if (!fichierEntree.is_open()) {
         cerr << "Erreur lors de l'ouverture du fichier de sortie : " << Nom << endl;
         return 0;
@@ -206,4 +208,154 @@ int Lexique::nombreMotsDifferents() const{
 
     //Retourne le nombre de mots différents
     return occurrences.size();
+}
+
+// -----------------------------------------------------------------------------
+
+// Surcharge de l'opérateur <<
+ostream& operator<<(ostream& os, const Lexique& lex) {
+    ifstream fichierEntree("tp1-Lexique-output/Lexique-" + lex.GetNom() + "-output.txt");
+    if (!fichierEntree.is_open()) {
+        os << "Erreur : impossible d'ouvrir le fichier du lexique." << endl;
+        return os;
+    }
+
+    map<string, int> occurrences;
+    string ligne;
+
+    while (getline(fichierEntree, ligne)) {
+        istringstream iss(ligne);
+        string word;
+        while (iss >> word) {
+            util::remove_punctuation(word);
+            util::to_lower(word);
+            if (!word.empty()) {
+                occurrences[word]++;
+            }
+        }
+    }
+
+    fichierEntree.close();
+
+    os << "=== Contenu du lexique : " << lex.GetNom() << " ===" << endl;
+    for (const auto& [mot, nb] : occurrences) {
+        os << mot << " : " << nb << endl;
+    }
+    os << "Nombre total de mots differents : " << occurrences.size() << endl;
+
+    return os;
+}
+
+
+
+// Surcharge += : fusionner deux lexiques
+Lexique& Lexique::operator+=(const Lexique& autre) {
+    string fichier1 = "tp1-Lexique-output/Lexique-" + Nom + "-output.txt";
+    string fichier2 = "tp1-Lexique-output/Lexique-" + autre.GetNom() + "-output.txt";
+
+    ifstream in1(fichier1);
+    ifstream in2(fichier2);
+
+    if (!in1.is_open() || !in2.is_open()) {
+        cerr << "Erreur : impossible d'ouvrir un des fichiers pour la fusion." << endl;
+        return *this;
+    }
+
+    // Map pour stocker les occurrences fusionnées
+    map<string, int> occurrences;
+    auto lireFichier = [&](ifstream& in) {
+        string ligne, mot;
+        while (getline(in, ligne)) {
+            istringstream iss(ligne);
+            while (iss >> mot) {
+                util::remove_punctuation(mot);
+                util::to_lower(mot);
+                if (!mot.empty()) occurrences[mot]++;
+            }
+        }
+    };
+
+    lireFichier(in1);
+    lireFichier(in2);
+    in1.close();
+    in2.close();
+
+    // Réécrire le fichier fusionné dans le fichier du premier lexique
+    ofstream out(fichier1, ios::trunc);
+    if (!out.is_open()) {
+        cerr << "Erreur lors de l'écriture du fichier fusionné." << endl;
+        return *this;
+    }
+
+    for (auto& [mot, count] : occurrences) {
+        out << mot << " (" << count << ")\n";
+    }
+
+    out.close();
+
+    cout << "Fusion terminee : " << fichier1 << " contient maintenant la fusion de "
+         << Nom << " et " << autre.GetNom() << endl;
+
+    return *this;
+}
+
+// Surcharge -= : différence entre deux lexiques
+
+Lexique& Lexique::operator-=(const Lexique& autre) {
+    string fichier1 = "tp1-Lexique-output/Lexique-" + Nom + "-output.txt";
+    string fichier2 = "tp1-Lexique-output/Lexique-" + autre.GetNom() + "-output.txt";
+
+    ifstream in1(fichier1);
+    ifstream in2(fichier2);
+
+    if (!in1.is_open() || !in2.is_open()) {
+        cerr << "Erreur : impossible d'ouvrir les fichiers pour la différence." << endl;
+        return *this;
+    }
+
+    // Charger tous les mots du second lexique
+    set<string> motsASupprimer;
+    string ligne, mot;
+    while (getline(in2, ligne)) {
+        istringstream iss(ligne);
+        while (iss >> mot) {
+            util::remove_punctuation(mot);
+            util::to_lower(mot);
+            if (!mot.empty())
+                motsASupprimer.insert(mot);
+        }
+    }
+
+    // Lire le premier lexique et ne garder que les mots absents du second
+    set<string> motsResultats;
+    while (getline(in1, ligne)) {
+        istringstream iss(ligne);
+        while (iss >> mot) {
+            util::remove_punctuation(mot);
+            util::to_lower(mot);
+            if (!mot.empty() && motsASupprimer.find(mot) == motsASupprimer.end())
+                motsResultats.insert(mot);
+        }
+    }
+
+    in1.close();
+    in2.close();
+
+    // Réécrire le fichier du premier lexique avec les mots filtrés
+    ofstream out(fichier1, ios::trunc);
+    if (!out.is_open()) {
+        cerr << "Erreur lors de la réécriture du fichier de sortie : " << fichier1 << endl;
+        return *this;
+    }
+
+    for (const auto& m : motsResultats)
+        out << m << "\n";
+
+    out.close();
+
+    cout << "Différence terminée : " << fichier1
+         << " ne contient plus les mots présents dans "
+         << autre.GetNom() << endl;
+
+    return *this;
 }

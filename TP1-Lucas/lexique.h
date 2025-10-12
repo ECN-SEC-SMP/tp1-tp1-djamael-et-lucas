@@ -26,7 +26,7 @@ using namespace std;
  */
 
 class Lexique{
-private:
+protected:
     string Nom;
     int Nbr_occurences;          
 
@@ -61,4 +61,13 @@ public:
 
     //Méthode pour afficher le nombre de mots différents dans le lexique
     int nombreMotsDifferents() const;
+
+    // Surcharge de l'opérateur <<
+    friend ostream& operator<<(ostream& os, const Lexique& lex);
+
+    // Surcharge += : fusionner deux lexiques
+    Lexique& operator+=(const Lexique& autre);
+
+    // Surcharge -= : différence de deux lexiques
+    Lexique& operator-=(const Lexique& autre);
 };

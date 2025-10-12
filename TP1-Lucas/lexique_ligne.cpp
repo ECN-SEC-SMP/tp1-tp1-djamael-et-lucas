@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include "lexique.h"
-#include "lexique_her.h"
+#include "lexique_ligne.h"
 #include "utilitaire.hpp"
 #include <math.h>  
 #include <fstream> 
@@ -12,14 +12,14 @@
 using namespace std;
 
 //constructeur sans parametre
-Lexique_her::Lexique_her() : Lexique() {
+Lexique_ligne::Lexique_ligne() : Lexique() {
     LignesParMot = map<string, vector<int>>(); //initialise la map
 }
 
 //Méthode pour construire le lexique avec lignes
-void Lexique_her::ConstruireLexiqueAvecLignes(const string& nomFichier) {
+void Lexique_ligne::ConstruireLexiqueAvecLignes(const string& nomFichier) {
     //Ouvre le fichier en lecture
-    ifstream fichierEntree("tp1-Lexique-output/Lexique-Lucas-output.txt"); //permet de lire le fichier d'entrée
+    ifstream fichierEntree("tp1-Lexique-output/Lexique-" + Nom + "-output.txt");  //permet de lire le fichier d'entrée
     if (!fichierEntree.is_open()) {
         cerr << "Erreur lors de l'ouverture du fichier de sortie : " << nomFichier << endl;
         return;
@@ -46,7 +46,7 @@ void Lexique_her::ConstruireLexiqueAvecLignes(const string& nomFichier) {
 }
 
 //Méthode pour obtenir les lignes pour un mot donné
-vector<int> Lexique_her::getLignesPourMot(const string& mot) const {
+vector<int> Lexique_ligne::getLignesPourMot(const string& mot) const {
     string motNettoye = mot; //copie du mot à tester
     util::remove_punctuation(motNettoye); //supprime la ponctuation
     util::to_lower(motNettoye); //met en minuscules

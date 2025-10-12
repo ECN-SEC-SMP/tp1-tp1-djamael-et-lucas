@@ -1,0 +1,11 @@
+Bonsoir ! Ceci est un second lexique d’essai.
+Il contient divers mots, certains répétés plusieurs fois pour les tests :
+Bonsoir, bonsoir, BONSOIR encore une fois.
+
+On retrouve aussi quelques variantes : programme, programmeur, programmation, PROGRAMME.
+Et des mots similaires : analyse, analyser, analyseur.
+
+Certains mots n’apparaissent qu’une seule fois : montagne, rivière, forêt, océan.
+Et pour finir, un peu de ponctuation et de nombres : test1, test2, test-3.
+
+Fin du lexique de test.
