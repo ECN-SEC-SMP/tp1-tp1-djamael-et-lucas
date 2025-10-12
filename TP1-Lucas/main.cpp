@@ -21,8 +21,8 @@ int main()
     //test_partie1_methode3(); //test de la méthode : supprimer un mot du lexique
     //test_partie1_methode4(); //test de la méthode : afficher le nombre de mots différents dans le lexique
     //test_partie1_surcharge(); //test des méthodes de surcharge d'opérateurs
-    test_partie2(); //test de la méthode : obtenir les lignes pour un mot donné
-
+    test_partie2(); //test de la méthode : obtenir les lignes pour un mot donné 
+ 
     return 0;
 }
 
