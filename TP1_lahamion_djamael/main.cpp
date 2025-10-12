@@ -57,7 +57,7 @@ int main()
 
     // Travail avec le lexique qui contient les lignes
     cout << "Lexique Avec lignes" << endl;
-    cout << lex << endl;  // Affichage du lexique avec lignes
+    // cout << lex << endl;  // Affichage du lexique avec lignes
     lex.print();          // Affichage détaillé avec les numéros de lignes
 
     return 0;

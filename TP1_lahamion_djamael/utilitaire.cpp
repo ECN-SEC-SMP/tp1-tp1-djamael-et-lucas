@@ -21,12 +21,12 @@ bool readFileIntoString(std::string_view path, std::string& content) {
 }
 
 void remove_punctuation(std::string& word) {
-    word.erase(std::remove_if(word.begin(), word.end(),
-               [](unsigned char ch) {
-                   // ASCII-centric punctuation test
-                   return std::ispunct(ch) != 0;
-               }),
-               word.end());
+    // Parcours chaque caractère
+    for (char& ch : word) {
+        if (std::ispunct(static_cast<unsigned char>(ch))) {
+            ch = ' '; // remplace la ponctuation par un espace
+        }
+    }
 }
 
 void to_lower(std::string& s) {
